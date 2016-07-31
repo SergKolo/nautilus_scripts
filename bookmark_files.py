@@ -43,12 +43,29 @@ def main():
     if not os.path.lexists( bookmark_dir  ):
        os.mkdir( bookmark_dir  )
 
+    # check if the directory is already added as bookmark
+    try:
+        bookmarks = os.path.join(user_home,'.config/gtk-3.0/bookmarks')
+        with open(bookmarks ,'a+') as file:
+            line_found = False
+            for line in file:
+               if bookmark_dir in line:
+                   line_found = True
+                   break
+        if not line_found:
+            file.write('file://' + bookmark_dir )   
+     except IOError:
+         text = '--text="Cannot automatically add bookmark directory.' + 
+                'Please do so manually"'  
+         subprocess.call(['zenity','--error',text])             
+
+    # create symlink to file
     try:
         basename = sys.argv[1].split('/')[-1]
         os.symlink(file_path, os.path.join(bookmark_dir,basename))
     except OSError as error :
         text = '--text="' + str(error) + '"'
-        subprocess.call( ['zenity','--error',text]   ) 
+        subprocess.call( ['zenity','--error',text] ) 
         #send_notification("OSError","{0}".format(error))
 
 if __name__ == '__main__':
