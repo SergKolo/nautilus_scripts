@@ -27,32 +27,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 __author__ = "Sergiy Kolodyazhnyy <1047481448@qq.com>"
-__name__ = "bookmark_file.py"
 
-import gi
-gi.require_version('Notify', '0.7')
-from gi.repository import Notify
 import os
 import sys
-
-
-def send_notification(title, text):
-    '''Custom function for sending on-screen notifications'''
-    try:
-        if Notify.init(argv[0]):
-            n = Notify.Notification.new("Notify")
-            n.update(title, text)
-            n.set_urgency(2)
-            if not n.show():
-                raise SyntaxError("sending notification failed!")
-        else:
-            raise SyntaxError("can't initialize notification!")
-    except SyntaxError as error:
-        print(error)
-        if error == "sending notification failed!":
-            Notify.uninit()
-    else:
-        Notify.uninit()
+import subprocess
 
 def main():
 
@@ -66,9 +44,12 @@ def main():
        os.mkdir( bookmark_dir  )
 
     try:
-        os.symlink(file_path, os.path.join(bookmark_dir,sys.argv[1]))
+        basename = sys.argv[1].split('/')[-1]
+        os.symlink(file_path, os.path.join(bookmark_dir,basename))
     except OSError as error :
-        print("OS error: {0}".format(error))
+        text = '--text="' + str(error) + '"'
+        subprocess.call( ['zenity','--error',text]   ) 
+        #send_notification("OSError","{0}".format(error))
 
 if __name__ == '__main__':
     main()
