@@ -45,18 +45,16 @@ def main():
 
     # check if the directory is already added as bookmark
     try:
+
         bookmarks = os.path.join(user_home,'.config/gtk-3.0/bookmarks')
         with open(bookmarks ,'a+') as file:
-            line_found = False
-            for line in file:
-               if bookmark_dir in line:
-                   line_found = True
-                   break
-        if not line_found:
-            file.write('file://' + bookmark_dir )   
-     except IOError:
-         text = '--text="Cannot automatically add bookmark directory.' + 
-                'Please do so manually"'  
+            file.seek(0)
+            data = file.read()  
+            if not bookmark_dir in data:
+                file.write('file://' + bookmark_dir )   
+
+    except IOError:
+         text = '--text="Cannot auto-add bookmark directory to panel.'
          subprocess.call(['zenity','--error',text])             
 
     # create symlink to file
@@ -66,7 +64,6 @@ def main():
     except OSError as error :
         text = '--text="' + str(error) + '"'
         subprocess.call( ['zenity','--error',text] ) 
-        #send_notification("OSError","{0}".format(error))
 
 if __name__ == '__main__':
     main()
