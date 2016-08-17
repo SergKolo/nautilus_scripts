@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Author: Serg Kolo
+Date: Aug 16,2016
+Written for: http://askubuntu.com/q/809925/295286
+"""
 import subprocess
 import sys
 import os.path
