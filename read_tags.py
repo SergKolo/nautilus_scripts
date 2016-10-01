@@ -3,8 +3,8 @@
 
 # Author: Serg Kolo  
 # Date: Oct 1st, 2016
-# Description: tag_file.py, script for
-#    recording paths to files under 
+# Description: read_tags.py, script for
+#    reading  paths to files under 
 #    specific , user-defined tag
 #    in ~/.tagged_files
 # Written for: http://askubuntu.com/q/827701/295286
